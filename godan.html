@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ sinh thái Net Zero Vinamilk</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts: Anton (Tiêu đề) & Montserrat (Nội dung) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap"
+        rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Montserrat"', 'sans-serif'], // Font chữ cho text thường
+                        display: ['"Anton"', 'sans-serif']    // Font chữ cho tiêu đề lớn
+                    },
+                    colors: {
+                        brand: {
+                            green: { 50: '#f0fdf4', 100: '#dcfce7', 300: '#86efac', 500: '#22c55e', 600: '#16a34a', 700: '#15803d', 900: '#14532d' },
+                            blue: { 50: '#eff6ff', 100: '#dbeafe', 300: '#93c5fd', 500: '#3b82f6', 600: '#2563eb', 800: '#1e40af', 900: '#1e3a8a' }
+                        }
+                    },
+                    boxShadow: {
+                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Base Styling */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+            background-color: #f8fafc;
+            color: #334155;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        .font-display {
+            font-family: 'Anton', sans-serif;
+            font-weight: normal;
+            /* Anton is inherently bold */
+            letter-spacing: 0.02em;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #16a34a;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #15803d;
+        }
+
+        /* Custom Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+
+        .reveal-left.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+
+        .reveal-right.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Floating Animation */
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Leaves Particle Effect */
+        .leaf {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2322c55e" stroke="none"><path d="M11 20A7 7 0 0 1 4 13C4 7 12 2 12 2S20 7 20 13A7 7 0 0 1 13 20H11Z"/></svg>') no-repeat center center;
+            background-size: contain;
+            animation: fall linear infinite;
+            opacity: 0;
+            z-index: 0;
+            filter: drop-shadow(0px 4px 6px rgba(34, 197, 94, 0.2));
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translate(0, -10vh) rotate(0deg);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0.4;
+            }
+
+            80% {
+                opacity: 0.4;
+            }
+
+            100% {
+                transform: translate(100px, 100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Spinning Utilities */
+        .spin-slow {
+            animation: spin 25s linear infinite;
+        }
+
+        .spin-slow-reverse {
+            animation: spin-reverse 30s linear infinite;
+        }
+
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes spin-reverse {
+            100% {
+                transform: rotate(-360deg);
+            }
+        }
+
+        /* Flowchart Interactive Styles */
+        .flow-step {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .flow-step:hover {
+            transform: translateY(-8px) scale(1.02);
+            z-index: 30;
+        }
+
+        .flow-step.highlight {
+            transform: scale(1.05) translateY(-5px);
+            box-shadow: 0 25px 50px -12px rgba(22, 163, 74, 0.25);
+            border-color: #22c55e;
+            background: white;
+            z-index: 20;
+        }
+
+        .flow-line {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: drawLine 4s linear infinite;
+        }
+
+        @keyframes drawLine {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        /* Gradient Utilities */
+        .text-gradient {
+            background: linear-gradient(135deg, #16a34a 0%, #2563eb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .bg-gradient-brand {
+            background: linear-gradient(135deg, rgba(22, 163, 74, 0.1) 0%, rgba(37, 99, 235, 0.1) 100%);
+        }
+
+        /* Parallax Section */
+        .bg-parallax {
+            background-image: url('https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    </style>
+</head>
+
+<body class="antialiased">
+
+    <!-- HERO SECTION -->
+    <section
+        class="relative min-h-screen flex items-center justify-center overflow-hidden bg-brand-green-50 pt-24 pb-20">
+        <!-- Particles -->
+        <div id="leaves-container" class="absolute inset-0 pointer-events-none"></div>
+
+        <!-- Abstract Background Shapes -->
+        <div
+            class="absolute w-[800px] h-[800px] border-[1px] border-dashed border-brand-green-600/20 rounded-full spin-slow pointer-events-none z-0">
+        </div>
+        <div
+            class="absolute w-[500px] h-[500px] border-[1px] border-brand-blue-600/10 rounded-full spin-slow-reverse pointer-events-none z-0">
+        </div>
+
+        <!-- Glows -->
+        <div
+            class="absolute top-0 right-0 w-96 h-96 bg-brand-green-300/30 rounded-full blur-[100px] pointer-events-none">
+        </div>
+        <div
+            class="absolute bottom-0 left-0 w-96 h-96 bg-brand-blue-300/20 rounded-full blur-[100px] pointer-events-none">
+        </div>
+
+        <div class="container mx-auto px-6 relative z-10 text-center max-w-5xl reveal">
+            <h1 class="font-display text-5xl md:text-7xl lg:text-8xl uppercase mb-4 leading-[1.25] text-slate-800">
+                Hệ sinh thái <span class="text-gradient">Net Zero</span>
+
+                <span class="block pt-4">
+                    của Vinamilk
+                </span>
+            </h1>
+
+
+            <!-- H2 (Anton) -->
+            <h2 class="font-display text-2xl md:text-4xl text-brand-green-600 mb-8 uppercase tracking-wide opacity-90">
+                Mầm xanh vươn khỏi trang trại
+            </h2>
+
+            <!-- Body Text (Montserrat) -->
+            <p class="text-base md:text-lg text-slate-600 leading-relaxed mx-auto max-w-3xl font-medium">
+                Không chỉ dừng lại ở các nhà máy hay trang trại nội bộ, hành trình hướng tới Net Zero 2050 của Vinamilk
+                đang đóng vai trò "hạt nhân" ứng dụng công nghệ tuần hoàn, thay đổi tư duy làm nông nghiệp bền vững của
+                cả một cộng đồng.
+            </p>
+
+            <!-- Hero Image -->
+            <div class="relative w-full max-w-4xl mx-auto mt-16 mb-12 reveal animate-float">
+                <div
+                    class="absolute inset-0 bg-brand-green-500/20 blur-[80px] rounded-[3rem] pointer-events-none transform scale-95">
+                </div>
+
+                <div
+                    class="relative p-2 md:p-4 bg-white/60 backdrop-blur-xl rounded-[2rem] md:rounded-[3rem] shadow-glass border border-white">
+                    <img src="https://images.unsplash.com/photo-1500595046743-cd271d694d30?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+                        alt="Nông trại sinh thái tuần hoàn"
+                        class="w-full h-auto object-cover rounded-[1.5rem] md:rounded-[2.5rem] shadow-sm"
+                        style="max-height: 500px;" />
+                </div>
+            </div>
+
+            <!-- Scroll Indicator -->
+            <div class="mt-8 animate-bounce flex justify-center">
+                <a href="#data-section"
+                    class="flex items-center justify-center w-14 h-14 rounded-full bg-white shadow-xl text-brand-green-600 hover:bg-brand-green-600 hover:text-white transition-all duration-300 border border-brand-green-100">
+                    <i data-lucide="arrow-down" class="w-6 h-6"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- TECHNOLOGY & DATA SECTION -->
+    <section id="data-section" class="py-24 bg-white relative">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16 reveal flex flex-col items-center">
+                <span
+                    class="px-4 py-1.5 bg-brand-green-100 text-brand-green-700 font-bold text-xs uppercase tracking-widest rounded-full mb-4">
+                    Công nghệ & Năng suất
+                </span>
+                <h2 class="font-display text-4xl md:text-5xl text-slate-800 uppercase">
+                    Sức mạnh chăn nuôi <span class="text-brand-blue-600">nhiệt đới</span>
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                <!-- Data Card 1 -->
+                <div
+                    class="reveal-left bg-gradient-brand p-1 rounded-[2rem] shadow-lg group hover:shadow-2xl transition-all duration-300">
+                    <div class="bg-white h-full p-10 rounded-[1.85rem] relative overflow-hidden">
+                        <div
+                            class="absolute -right-8 -top-8 opacity-5 group-hover:opacity-10 group-hover:scale-110 transition-all duration-500">
+                            <i data-lucide="droplets" class="w-64 h-64 text-brand-green-600"></i>
+                        </div>
+                        <div class="relative z-10">
+                            <div class="flex items-end gap-3 mb-4">
+                                <span class="font-display text-7xl md:text-8xl text-gradient num-count leading-none"
+                                    data-target="35">0</span>
+                                <span class="text-xl md:text-2xl font-bold text-slate-400 pb-2">lít/con/ngày</span>
+                            </div>
+                            <h4 class="font-display text-2xl text-slate-800 mb-3 uppercase tracking-wide">Năng suất
+                                chuẩn quốc tế</h4>
+                            <p class="text-slate-600 font-medium leading-relaxed">Phá vỡ rào cản khí hậu nhiệt đới nhờ
+                                công nghệ chăn nuôi hiện đại, đạt năng suất vắt sữa tương đương mức trung bình thế giới.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data Card 2 -->
+                <div
+                    class="reveal-right bg-gradient-brand p-1 rounded-[2rem] shadow-lg group hover:shadow-2xl transition-all duration-300">
+                    <div class="bg-white h-full p-10 rounded-[1.85rem] relative overflow-hidden">
+                        <div
+                            class="absolute -right-8 -top-8 opacity-5 group-hover:opacity-10 group-hover:scale-110 transition-all duration-500">
+                            <i data-lucide="globe-2" class="w-64 h-64 text-brand-blue-600"></i>
+                        </div>
+                        <div class="relative z-10">
+                            <div class="flex items-end gap-3 mb-4">
+                                <span class="font-display text-7xl md:text-8xl text-gradient num-count leading-none"
+                                    data-target="12">0</span>
+                                <span class="text-xl md:text-2xl font-bold text-slate-400 pb-2">năm</span>
+                            </div>
+                            <h4 class="font-display text-2xl text-slate-800 mb-3 uppercase tracking-wide">Tiên phong ESG
+                            </h4>
+                            <p class="text-slate-600 font-medium leading-relaxed">Áp dụng chuẩn mực quốc tế vào kiểm kê
+                                khí nhà kính và lập báo cáo phát triển bền vững trước cả khi có quy định bắt buộc.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GREEN DATA VISUALIZATION SECTION -->
+    <section class="py-24 bg-slate-50 relative overflow-hidden border-t border-slate-100">
+        <!-- Decorative subtle pattern -->
+        <div class="absolute inset-0 opacity-[0.03]"
+            style="background-image: radial-gradient(#16a34a 2px, transparent 2px); background-size: 32px 32px;"></div>
+
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center mb-16 reveal flex flex-col items-center">
+                <span
+                    class="px-4 py-1.5 bg-brand-blue-100 text-brand-blue-800 font-bold text-xs uppercase tracking-widest rounded-full mb-4">
+                    Tác động môi trường
+                </span>
+                <h2 class="font-display text-4xl md:text-5xl text-slate-800 uppercase">
+                    Trực quan hóa <span class="text-brand-green-600">Dữ liệu xanh</span>
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+
+                <!-- Card 1: Carbon / Forest -->
+                <div
+                    class="bg-white rounded-[2rem] shadow-glass hover:shadow-2xl transition-all duration-500 reveal flex flex-col overflow-hidden group">
+                    <!-- Top: Static Data -->
+                    <div class="p-8 pb-6 text-center relative z-20 bg-white">
+                        <p class="text-slate-500 font-semibold mb-2 text-sm uppercase tracking-wider">Tương đương</p>
+                        <h3 class="font-display text-6xl text-brand-green-600 mb-2 num-count" data-target="30000">0</h3>
+                        <p class="text-slate-800 font-bold text-lg">sân bóng phủ xanh</p>
+                    </div>
+
+                    <!-- Bottom: Interactive Image Area -->
+                    <div class="h-64 w-full relative overflow-hidden bg-brand-green-900">
+                        <!-- Base Image -->
+                        <img src="https://images.unsplash.com/photo-1448375240586-882707db888b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                            alt="Rừng xanh"
+                            onerror="this.onerror=null; this.src='https://placehold.co/800x400/16a34a/ffffff?text=Forest+Carbon';"
+                            class="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:opacity-20 group-hover:scale-110 transition-all duration-700" />
+
+                        <!-- Default Gradient & Label (Fades out on hover) -->
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-brand-green-900/90 via-brand-green-900/20 to-transparent opacity-100 group-hover:opacity-0 transition-opacity duration-500">
+                        </div>
+                        <div
+                            class="absolute bottom-6 left-0 w-full text-center opacity-100 group-hover:opacity-0 group-hover:translate-y-4 transition-all duration-500">
+                            <span class="text-white text-sm font-bold tracking-wider uppercase">Hấp thụ Carbon</span>
+                        </div>
+
+                        <!-- Hidden Content (Slides up on hover) -->
+                        <div
+                            class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center opacity-0 group-hover:opacity-100 translate-y-8 group-hover:translate-y-0 transition-all duration-500 ease-out">
+                            <div
+                                class="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center mb-3">
+                                <i data-lucide="leaf" class="text-brand-green-300 w-5 h-5"></i>
+                            </div>
+                            <h4 class="text-white font-bold mb-3 font-display tracking-wide uppercase text-xl">Chi tiết
+                                dữ liệu</h4>
+                            <ul class="text-brand-green-50 text-sm space-y-2 font-medium text-left w-full pl-4">
+                                <li class="flex items-start gap-2">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-brand-green-400 mt-1.5 shrink-0"></div> Giảm
+                                    100.000 tấn CO2/năm
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-brand-green-400 mt-1.5 shrink-0"></div> Phủ
+                                    xanh 70% diện tích đất
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-brand-green-400 mt-1.5 shrink-0"></div> 100%
+                                    sử dụng năng lượng sạch
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Water -->
+                <div class="bg-white rounded-[2rem] shadow-glass hover:shadow-2xl transition-all duration-500 reveal flex flex-col overflow-hidden group"
+                    style="transition-delay: 150ms;">
+                    <!-- Top: Static Data -->
+                    <div class="p-8 pb-6 text-center relative z-20 bg-white">
+                        <p class="text-slate-500 font-semibold mb-2 text-sm uppercase tracking-wider">Tiết kiệm</p>
+                        <h3 class="font-display text-6xl text-brand-blue-600 mb-2 num-count" data-target="86">0</h3>
+                        <p class="text-slate-800 font-bold text-lg">hồ bơi Olympic</p>
+                    </div>
+
+                    <!-- Bottom: Interactive Image Area -->
+                    <div class="h-64 w-full relative overflow-hidden bg-brand-blue-900">
+                        <img src="https://images.unsplash.com/photo-1488188840666-e2308741a62f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                            alt="Nước trong"
+                            onerror="this.onerror=null; this.src='https://placehold.co/800x400/2563eb/ffffff?text=Water+Cycle';"
+                            class="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:opacity-20 group-hover:scale-110 transition-all duration-700" />
+
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-brand-blue-900/90 via-brand-blue-900/20 to-transparent opacity-100 group-hover:opacity-0 transition-opacity duration-500">
+                        </div>
+                        <div
+                            class="absolute bottom-6 left-0 w-full text-center opacity-100 group-hover:opacity-0 group-hover:translate-y-4 transition-all duration-500">
+                            <span class="text-white text-sm font-bold tracking-wider uppercase">Tuần hoàn nước</span>
+                        </div>
+
+                        <!-- Hidden Content -->
+                        <div
+                            class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center opacity-0 group-hover:opacity-100 translate-y-8 group-hover:translate-y-0 transition-all duration-500 ease-out">
+                            <div
+                                class="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center mb-3">
+                                <i data-lucide="droplets" class="text-brand-blue-300 w-5 h-5"></i>
+                            </div>
+                            <h4 class="text-white font-bold mb-3 font-display tracking-wide uppercase text-xl">Chi tiết
+                                dữ liệu</h4>
+                            <ul class="text-brand-blue-50 text-sm space-y-2 font-medium text-left w-full pl-4">
+                                <li class="flex items-start gap-2">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-brand-blue-400 mt-1.5 shrink-0"></div> Tái
+                                    sử dụng 100% nước thải
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-brand-blue-400 mt-1.5 shrink-0"></div> Đạt
+                                    chuẩn quốc tế ISO 14046
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-brand-blue-400 mt-1.5 shrink-0"></div> Hệ
+                                    thống tưới tiêu khép kín
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Soil -->
+                <div class="bg-white rounded-[2rem] shadow-glass hover:shadow-2xl transition-all duration-500 reveal flex flex-col overflow-hidden group"
+                    style="transition-delay: 300ms;">
+                    <!-- Top: Static Data -->
+                    <div class="p-8 pb-6 text-center relative z-20 bg-white">
+                        <p class="text-slate-500 font-semibold mb-2 text-sm uppercase tracking-wider">Thời gian</p>
+                        <h3 class="font-display text-6xl text-amber-600 mb-2"><span class="num-count"
+                                data-target="3">0</span> Năm</h3>
+                        <p class="text-slate-800 font-bold text-lg">"Ngủ đông" thanh lọc</p>
+                    </div>
+
+                    <!-- Bottom: Interactive Image Area -->
+                    <div class="h-64 w-full relative overflow-hidden bg-amber-900">
+                        <!-- Đã thay bằng link ảnh đất/mầm cây mới đảm bảo hoạt động -->
+                        <img src="https://images.unsplash.com/photo-1605000797499-95a51c5269ae?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                            alt="Đất đai"
+                            onerror="this.onerror=null; this.src='https://placehold.co/800x400/d97706/ffffff?text=Soil+Recovery';"
+                            class="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:opacity-20 group-hover:scale-110 transition-all duration-700" />
+
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-amber-900/90 via-amber-900/20 to-transparent opacity-100 group-hover:opacity-0 transition-opacity duration-500">
+                        </div>
+                        <div
+                            class="absolute bottom-6 left-0 w-full text-center opacity-100 group-hover:opacity-0 group-hover:translate-y-4 transition-all duration-500">
+                            <span class="text-white text-sm font-bold tracking-wider uppercase">Phục hồi đất</span>
+                        </div>
+
+                        <!-- Hidden Content -->
+                        <div
+                            class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center opacity-0 group-hover:opacity-100 translate-y-8 group-hover:translate-y-0 transition-all duration-500 ease-out">
+                            <div
+                                class="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center mb-3">
+                                <i data-lucide="sprout" class="text-amber-300 w-5 h-5"></i>
+                            </div>
+                            <h4 class="text-white font-bold mb-3 font-display tracking-wide uppercase text-xl">Chi tiết
+                                dữ liệu</h4>
+                            <ul class="text-amber-50 text-sm space-y-2 font-medium text-left w-full pl-4">
+                                <li class="flex items-start gap-2">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-amber-400 mt-1.5 shrink-0"></div> Canh tác
+                                    chuẩn Organic Châu Âu
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-amber-400 mt-1.5 shrink-0"></div> Không hóa
+                                    chất độc hại
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-amber-400 mt-1.5 shrink-0"></div> Cân bằng
+                                    hệ vi sinh tự nhiên
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- CIRCULAR ECONOMY FLOWCHART -->
+    <section class="py-24 bg-white relative overflow-hidden">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-20 reveal">
+                <h2 class="font-display text-4xl md:text-5xl text-slate-800 uppercase mb-4">
+                    Sơ đồ kinh tế <span class="text-brand-green-600">tuần hoàn</span>
+                </h2>
+                <p class="text-slate-500 font-medium max-w-2xl mx-auto">
+                    Di chuột hoặc chạm vào các thẻ để xem chi tiết vòng lặp sinh thái kết nối Vinamilk và người nông
+                    dân.
+                </p>
+            </div>
+
+            <div class="relative max-w-5xl mx-auto py-10" id="flowchart-container">
+
+                <!-- Background Orbit (Desktop) -->
+                <div
+                    class="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[750px] h-[750px] pointer-events-none z-0">
+                    <svg viewBox="0 0 750 750" class="w-full h-full">
+                        <circle cx="375" cy="375" r="360" fill="none" stroke="#f1f5f9" stroke-width="4" />
+                        <circle cx="375" cy="375" r="360" fill="none" stroke="url(#greenBlueGradient)" stroke-width="6"
+                            class="flow-line" />
+                        <defs>
+                            <linearGradient id="greenBlueGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#16a34a" />
+                                <stop offset="50%" stop-color="#2563eb" />
+                                <stop offset="100%" stop-color="#16a34a" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+
+                <!-- Center Hub -->
+                <div class="hidden md:flex absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-white rounded-full shadow-[0_0_40px_rgba(34,197,94,0.15)] items-center justify-center border-[10px] border-slate-50 z-20 transition-all duration-500"
+                    id="center-hub">
+                    <div
+                        class="relative w-28 h-28 bg-gradient-to-tr from-brand-green-500 to-brand-blue-500 rounded-full flex items-center justify-center text-white shadow-inner shadow-black/20">
+                        <i data-lucide="refresh-ccw" class="w-12 h-12 spin-slow" id="center-icon"></i>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-x-72 md:gap-y-32 relative z-10" id="flowchart">
+
+                    <!-- Step 1 -->
+                    <div class="flow-step bg-white border border-slate-100 p-8 rounded-3xl shadow-lg relative group"
+                        id="step-0">
+                        <div
+                            class="absolute -top-6 -left-6 w-14 h-14 bg-brand-blue-600 text-white rounded-full flex items-center justify-center font-display text-2xl shadow-lg border-4 border-white">
+                            1</div>
+                        <div
+                            class="text-brand-blue-600 mb-6 bg-brand-blue-50 w-fit p-4 rounded-2xl group-hover:bg-brand-blue-600 group-hover:text-white transition-colors duration-300">
+                            <i data-lucide="trash-2" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="font-display text-2xl mb-3 text-slate-800 tracking-wide">Xử lý chất thải</h3>
+                        <p class="text-slate-600 font-medium text-sm leading-relaxed">Công nghệ Biogas Nhật Bản xử lý
+                            chất thải của hàng ngàn con bò, khử mùi hiệu quả tại các trang trại.</p>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="flow-step bg-white border border-slate-100 p-8 rounded-3xl shadow-lg relative md:translate-y-20 group"
+                        id="step-1">
+                        <div
+                            class="absolute -top-6 -right-6 md:-right-auto md:-left-6 w-14 h-14 bg-brand-green-500 text-white rounded-full flex items-center justify-center font-display text-2xl shadow-lg border-4 border-white">
+                            2</div>
+                        <div
+                            class="text-brand-green-500 mb-6 bg-brand-green-50 w-fit p-4 rounded-2xl group-hover:bg-brand-green-500 group-hover:text-white transition-colors duration-300">
+                            <i data-lucide="leaf" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="font-display text-2xl mb-3 text-slate-800 tracking-wide">Chuyển hóa Hữu cơ</h3>
+                        <p class="text-slate-600 font-medium text-sm leading-relaxed">Tạo ra nguồn phân bón hữu cơ chất
+                            lượng cao và năng lượng sạch từ quy trình xử lý khép kín.</p>
+                    </div>
+
+                    <!-- Step 4 (Visual order swapped for circle) -->
+                    <div class="flow-step bg-white border border-slate-100 p-8 rounded-3xl shadow-lg relative md:-translate-y-20 group"
+                        id="step-3">
+                        <div
+                            class="absolute -top-6 -left-6 w-14 h-14 bg-brand-blue-800 text-white rounded-full flex items-center justify-center font-display text-2xl shadow-lg border-4 border-white">
+                            4</div>
+                        <div
+                            class="text-brand-blue-800 mb-6 bg-brand-blue-50 w-fit p-4 rounded-2xl group-hover:bg-brand-blue-800 group-hover:text-white transition-colors duration-300">
+                            <i data-lucide="shopping-basket" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="font-display text-2xl mb-3 text-slate-800 tracking-wide">Thu mua Sinh thái</h3>
+                        <p class="text-slate-600 font-medium text-sm leading-relaxed">Trang trại thu mua lại nông sản
+                            (bắp, lúa chuẩn hữu cơ) từ chính nông dân làm thức ăn an toàn cho bò.</p>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="flow-step bg-white border border-slate-100 p-8 rounded-3xl shadow-lg relative group"
+                        id="step-2">
+                        <div
+                            class="absolute -top-6 -right-6 md:-right-auto md:-left-6 w-14 h-14 bg-brand-green-700 text-white rounded-full flex items-center justify-center font-display text-2xl shadow-lg border-4 border-white">
+                            3</div>
+                        <div
+                            class="text-brand-green-700 mb-6 bg-brand-green-50 w-fit p-4 rounded-2xl group-hover:bg-brand-green-700 group-hover:text-white transition-colors duration-300">
+                            <i data-lucide="users" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="font-display text-2xl mb-3 text-slate-800 tracking-wide">Cải tạo Cộng đồng</h3>
+                        <p class="text-slate-600 font-medium text-sm leading-relaxed">Cung cấp phân bón lại cho nông dân
+                            xung quanh để cải tạo đất, canh tác nông nghiệp không hóa chất.</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- COMMUNITY IMPACT (PARALLAX) -->
+    <section class="py-24 bg-parallax relative bg-slate-900">
+        <!-- Overlay -->
+        <div class="absolute inset-0 bg-slate-900/85 backdrop-blur-sm"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-brand-green-900/20 to-brand-blue-900/40">
+        </div>
+
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center mb-16 reveal">
+                <h2 class="font-display text-4xl md:text-5xl text-white uppercase mb-4 tracking-wide">
+                    Tác động lan tỏa cộng đồng
+                </h2>
+                <p class="text-slate-300 max-w-2xl mx-auto font-medium">
+                    Thay đổi bức tranh nông nghiệp địa phương, kiến tạo giá trị bền vững cho con người và đất đai.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Impact 1 -->
+                <div
+                    class="bg-white/10 backdrop-blur-md border border-white/10 p-8 rounded-[2rem] text-white reveal-left hover:bg-white/20 transition-colors">
+                    <div
+                        class="w-16 h-16 bg-brand-blue-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-brand-blue-500/30">
+                        <i data-lucide="brain-circuit" class="w-8 h-8 text-white"></i>
+                    </div>
+                    <h3 class="font-display text-2xl mb-3 tracking-wide">Thay đổi tư duy</h3>
+                    <p class="text-slate-200 text-sm leading-relaxed font-medium">Chuyển đổi từ canh tác truyền thống
+                        sang nông nghiệp tuần hoàn, sử dụng tài nguyên (đất, nước) hiệu quả triệt để.</p>
+                </div>
+
+                <!-- Impact 2 -->
+                <div class="bg-white/10 backdrop-blur-md border border-white/10 p-8 rounded-[2rem] text-white reveal hover:bg-white/20 transition-colors"
+                    style="transition-delay: 150ms;">
+                    <div
+                        class="w-16 h-16 bg-brand-green-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-brand-green-500/30">
+                        <i data-lucide="trending-up" class="w-8 h-8 text-white"></i>
+                    </div>
+                    <h3 class="font-display text-2xl mb-3 tracking-wide">Thu nhập kép</h3>
+                    <p class="text-slate-200 text-sm leading-relaxed font-medium">Nông dân không chỉ bán sữa/nông sản,
+                        mà còn bán được phân bón hữu cơ cho các vùng trồng trọt lân cận.</p>
+                </div>
+
+                <!-- Impact 3 -->
+                <div
+                    class="bg-white/10 backdrop-blur-md border border-white/10 p-8 rounded-[2rem] text-white reveal-right hover:bg-white/20 transition-colors">
+                    <div
+                        class="w-16 h-16 bg-brand-green-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-brand-green-600/30">
+                        <i data-lucide="sprout" class="w-8 h-8 text-white"></i>
+                    </div>
+                    <h3 class="font-display text-2xl mb-3 tracking-wide">Phục hồi đất</h3>
+                    <p class="text-slate-200 text-sm leading-relaxed font-medium">Biến những nông trường hoang hóa, năng
+                        suất thấp thành những "cánh đồng tiền tỷ" nhờ canh tác hữu cơ.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CLOSING SECTION -->
+    <section
+        class="min-h-[50vh] flex items-center justify-center relative bg-white text-slate-800 overflow-hidden text-center py-20 border-b-8 border-brand-green-600">
+        <!-- Decoration -->
+        <div
+            class="absolute top-0 left-1/2 -translate-x-1/2 w-[80vw] h-96 bg-brand-blue-50/50 rounded-full blur-[80px] pointer-events-none">
+        </div>
+
+        <div class="container mx-auto px-6 relative z-10 reveal">
+            <div class="mb-8 flex justify-center">
+                <div
+                    class="w-20 h-20 rounded-full bg-brand-green-600 text-white flex items-center justify-center font-display text-4xl shadow-xl shadow-brand-green-500/30">
+                    V
+                </div>
+            </div>
+            <h2 class="font-display text-5xl md:text-6xl mb-6 uppercase">
+                Net Zero là <br class="md:hidden" /> <span class="text-gradient">hệ sinh thái sống</span>
+            </h2>
+            <p class="text-slate-500 text-lg md:text-xl max-w-2xl mx-auto font-medium">
+                Cùng nhau, chúng ta gieo mầm hôm nay cho một hành tinh xanh ngày mai.
+            </p>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 py-8 text-center text-sm text-slate-400 font-medium">
+        <p>&copy; 2026 Infographic UI/UX Concept: Vinamilk Net Zero.</p>
+        <p class="text-xs mt-2 opacity-60">Typography: Anton & Montserrat. Colors: Green & Blue Tones.</p>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script>
+        // 1. Khởi tạo Icon
+        lucide.createIcons();
+
+        // 2. Observer cho hiệu ứng Reveal (Scroll)
+        const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+
+                    // Kích hoạt hiệu ứng đếm số khi phần tử xuất hiện trên màn hình
+                    const counters = entry.target.querySelectorAll('.num-count');
+                    counters.forEach(counter => {
+                        if (!counter.dataset.counted) {
+                            animateNumber(counter);
+                            counter.dataset.counted = true;
+                        }
+                    });
+                }
+            });
+        }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // 3. Hàm đếm số mượt mà (Count up animation)
+        function animateNumber(element) {
+            const target = parseInt(element.getAttribute('data-target'), 10);
+            const duration = 2500; // 2.5s
+            const frameRate = 1000 / 60;
+            const totalFrames = Math.round(duration / frameRate);
+            let frame = 0;
+
+            const counter = setInterval(() => {
+                frame++;
+                const progress = frame / totalFrames;
+                // easeOutExpo function cho hiệu ứng chậm dần về cuối
+                const easeOut = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+                const currentCount = Math.round(target * easeOut);
+
+                // Format số có dấu chấm (VD: 30000 -> 30.000)
+                element.innerText = currentCount.toLocaleString('vi-VN');
+
+                if (frame === totalFrames) {
+                    clearInterval(counter);
+                    element.innerText = target.toLocaleString('vi-VN');
+                }
+            }, frameRate);
+        }
+
+        // 4. Sinh hạt lá rơi (Hero Section)
+        function createLeaves() {
+            const container = document.getElementById('leaves-container');
+            const numLeaves = 20;
+
+            for (let i = 0; i < numLeaves; i++) {
+                const leaf = document.createElement('div');
+                leaf.classList.add('leaf');
+
+                // Random vị trí, thời gian rơi, và độ trễ
+                const leftPos = Math.random() * 100;
+                const animDuration = 6 + Math.random() * 8; // 6s - 14s
+                const animDelay = Math.random() * 5;
+                const scale = 0.5 + Math.random() * 0.8; // Kích thước ngẫu nhiên
+
+                leaf.style.left = `${leftPos}vw`;
+                leaf.style.animationDuration = `${animDuration}s`;
+                leaf.style.animationDelay = `${animDelay}s`;
+                leaf.style.transform = `scale(${scale})`;
+
+                container.appendChild(leaf);
+            }
+        }
+        createLeaves();
+
+        // 5. Tương tác Sơ đồ Kinh tế tuần hoàn (Flowchart)
+        const steps = [
+            document.getElementById('step-0'),
+            document.getElementById('step-1'),
+            document.getElementById('step-2'),
+            document.getElementById('step-3')
+        ];
+
+        let currentStep = 0;
+        let flowInterval;
+        const centerHub = document.getElementById('center-hub');
+        const centerIcon = document.getElementById('center-icon');
+
+        function highlightFlowchart(index = -1) {
+            steps.forEach(step => step.classList.remove('highlight'));
+
+            if (index !== -1) currentStep = index;
+
+            if (steps[currentStep]) {
+                steps[currentStep].classList.add('highlight');
+
+                // Đổi màu Hub trung tâm đồng bộ với thẻ được highlight
+                if (centerHub && centerIcon) {
+                    // Reset classes
+                    centerHub.className = "hidden md:flex absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-white rounded-full items-center justify-center border-[10px] z-20 transition-all duration-500 shadow-xl";
+
+                    if (currentStep === 0 || currentStep === 2) { // Thẻ màu Blue
+                        centerHub.classList.add('border-brand-blue-50', 'scale-105');
+                    } else { // Thẻ màu Green
+                        centerHub.classList.add('border-brand-green-50', 'scale-105');
+                    }
+                }
+            }
+
+            if (index === -1) {
+                currentStep = (currentStep + 1) % steps.length;
+            }
+        }
+
+        // Hover event listeners
+        steps.forEach((step, index) => {
+            step.addEventListener('mouseenter', () => {
+                clearInterval(flowInterval);
+                highlightFlowchart(index);
+            });
+
+            step.addEventListener('mouseleave', () => {
+                if (centerHub) centerHub.classList.remove('scale-105');
+                startFlowAnimation();
+            });
+        });
+
+        function startFlowAnimation() {
+            clearInterval(flowInterval);
+            flowInterval = setInterval(() => highlightFlowchart(-1), 3000); // Đổi step mỗi 3s
+        }
+
+        // Khởi chạy animation flowchart
+        highlightFlowchart(-1);
+        startFlowAnimation();
+
+    </script>
+</body>
+
+</html>
