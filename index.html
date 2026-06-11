@@ -245,6 +245,16 @@
 
 <body class="antialiased">
 
+    <!-- Music Toggle -->
+    <button id="musicBtn"
+        class="fixed top-5 right-5 z-[9999] bg-white/90 backdrop-blur-md rounded-full w-14 h-14 shadow-xl flex items-center justify-center text-2xl hover:scale-110 transition">
+        🎵
+    </button>
+
+    <audio id="bgMusic" loop preload="auto">
+        <source src="come_my_way.mp3" type="audio/mpeg">
+    </audio>
+
     <!-- HERO SECTION -->
     <section
         class="relative min-h-screen flex items-center justify-center overflow-hidden bg-brand-green-50 pt-24 pb-20">
@@ -890,6 +900,51 @@
         // Khởi chạy animation flowchart
         highlightFlowchart(-1);
         startFlowAnimation();
+
+
+        // ================= MUSIC =================
+
+        const bgMusic = document.getElementById("bgMusic");
+        const musicBtn = document.getElementById("musicBtn");
+
+        // Âm lượng nền
+        bgMusic.volume = 0.15;
+
+        // Nếu trước đó đã bật nhạc
+        if (localStorage.getItem("musicEnabled") === "true") {
+
+            bgMusic.play().then(() => {
+                musicBtn.textContent = "🔊";
+            }).catch(() => {
+                musicBtn.textContent = "🎵";
+            });
+
+        }
+
+        // Nút bật tắt
+        musicBtn.addEventListener("click", async () => {
+
+            if (bgMusic.paused) {
+
+                try {
+                    console.log("hello")
+                    await bgMusic.play();
+
+                    localStorage.setItem("musicEnabled", "true");
+                    musicBtn.textContent = "🔊";
+
+                } catch (err) {
+                    console.log(err);
+                }
+
+            } else {
+
+                bgMusic.pause();
+
+                localStorage.setItem("musicEnabled", "false");
+                musicBtn.textContent = "🎵";
+            }
+        });
 
     </script>
 </body>
